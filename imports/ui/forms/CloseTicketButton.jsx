@@ -5,14 +5,16 @@ export const CloseTicketButton = (props) => {
 
     const CloseTicket = () => {
         let confirmation = confirm("Are you sure you want to close this ticket?" + props.ticket_id);
-        if(confirmation) {
+        let comment = prompt("Please provide a closing comment..");
+
+        if(confirmation && comment) {
             ticketsdb.update({ _id: props.ticket_id },
                 {
                    $set: {
                        status: {
                            closed: 1,
                            closed_by: "corey",
-                           closure_message: prompt("Please provide a closing comment.."),
+                           closure_message: comment,
                            closure_timestamp: new Date(),
                        }
                    }

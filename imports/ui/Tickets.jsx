@@ -1,8 +1,9 @@
 import React from 'react';
-import { useTracker } from 'meteor/react-meteor-data';
-import { ticketsdb } from '../api/tickets';
-import { NewTicketForm } from "./forms/NewTicketForm";
-import { CloseTicketButton } from "./forms/CloseTicketButton";
+import {useTracker} from 'meteor/react-meteor-data';
+import {ticketsdb} from '../api/tickets';
+import {NewTicketForm} from "./forms/NewTicketForm";
+import {CloseTicketButton} from "./forms/CloseTicketButton";
+import {RenameTicketButton} from "./forms/RenameTicketButton";
 
 export const Tickets = () => {
 
@@ -17,8 +18,9 @@ export const Tickets = () => {
         <h2>Open tickets ({ticketsdb.find({status:"open"}).count()})</h2>
         <ul>{opentickets.map(
             ticket => <li key={ticket._id}>
-                <a href={"/ticket/" + ticket._id} target="_blank">{ticket.title}</a>
+                <a href={"/ticket/" + ticket._id}>{ticket.title}</a>
                 <CloseTicketButton ticket_id={ticket._id} />
+                <RenameTicketButton ticket_id={ticket._id} />
                 <ul>
                     <li>Description: {ticket.description}</li>
                     <li>Author: {ticket.author}</li>
