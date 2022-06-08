@@ -10,13 +10,16 @@ export const NewTicketForm = () => {
     const timestamp = new Date();
 
     const createTicket = () => {
-        ticketsdb.insert({ title, description, assigned_to, author, priority, status: "open", timestamp });
 
-        setTitle("");
-        setDescription("");
-        setAssigned_To("");
-        setAuthor("");
-        setPriority("");
+        if(title || title && description) {
+            ticketsdb.insert({ title, description, assigned_to, author, priority, status: "open", timestamp });
+
+            setTitle("");
+            setDescription("");
+            setAssigned_To("");
+            setAuthor("");
+            setPriority("");
+        }
     }
 
     return(
@@ -64,7 +67,7 @@ export const NewTicketForm = () => {
                 <input
                     type="text"
                     id="author"
-                    value={author}
+                        value={author}
                     placeholder={"corey"}
                     onChange={(e) => setAuthor(e.target.value)}
                 />
