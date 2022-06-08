@@ -2,10 +2,10 @@ import { Meteor } from 'meteor/meteor';
 import { ticketsdb } from "../imports/api/tickets";
 
 Meteor.startup(() => {
-  // Let's populate the database with some initial tickets
+  // Let's populate the database with some initial TicketDetails
   if (ticketsdb.find().count() === 0) {
     ticketsdb.insert({
-      title: "Create tickets database and populate it with some initial tickets",
+      title: "Create TicketDetails database and populate it with some initial TicketDetails",
       description: null,
       assigned_to: "corey",
       author: "corey",
@@ -20,7 +20,7 @@ Meteor.startup(() => {
     });
 
     ticketsdb.insert({
-      title: "Allow for new tickets to be created via a form",
+      title: "Allow for new TicketDetails to be created via a form",
       description: null,
       assigned_to: "corey",
       author: "corey",

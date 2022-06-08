@@ -5,17 +5,17 @@ import { NewTicketForm } from "./forms/NewTicketForm";
 import { CloseTicketButton } from "./forms/CloseTicketButton";
 
 export const Tickets = () => {
-  const tickets = useTracker(() => {
-    return ticketsdb.find().fetch();
+
+  const opentickets = useTracker(() => {
+    return ticketsdb.find({status: "open"}).fetch();
   });
 
   return (
     <div>
         <h2>Create ticket</h2>
         <NewTicketForm/>
-        <h2>All tickets</h2>
-
-        <ul>{tickets.map(
+        <h2>Open tickets ({ticketsdb.find({status:"open"}).count()})</h2>
+        <ul>{opentickets.map(
             ticket => <li key={ticket._id}>
                 <a href={"/ticket/" + ticket._id} target="_blank">{ticket.title}</a>
                 <CloseTicketButton ticket_id={ticket._id} />
