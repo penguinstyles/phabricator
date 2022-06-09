@@ -1,5 +1,6 @@
 import React from "react";
-import { ticketsdb } from "../../api/tickets";
+import {commentsdb} from "../../api/comments";
+import {ticketsdb} from "../../api/tickets";
 
 export const CloseTicketButton = (props) => {
 
@@ -8,17 +9,23 @@ export const CloseTicketButton = (props) => {
         let comment = prompt("Please provide a closing comment..");
 
         if(confirmation && comment) {
-            ticketsdb.update({ _id: props.ticket_id },
-                {
-                   $set: {
-                       status: {
-                           closed: 1,
-                           closed_by: "corey",
-                           closure_message: comment,
-                           closure_timestamp: new Date(),
-                       }
-                   }
-                });
+            ticketsdb.update({ _id: props.ticket_id }, {
+                $set: {
+                    status: {
+                        closed: 1,
+                        closed_by: "corey",
+                        closure_message: comment,
+                        closure_timestamp: new Date(),
+                    }
+                }
+            });
+
+            commentsdb.insert({
+                author: "[Phabricator]",
+                comment: "This ticket was closed with the following reason: " + comment,
+                parent_ticket: props.ticket_id,
+                timestamp: new Date()
+            });
         }
     }
 

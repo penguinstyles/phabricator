@@ -48,7 +48,7 @@ export const TicketDetails = (params, queryParams) => {
             )}</ul>
 
             <h3>Submit a new comment</h3>
-            <NewTicketCommentForm id={_id}/>
+            {thisTicket[0].status === "open" ? <NewTicketCommentForm id={_id}/> : "This ticket has been closed and may not be commented on."}
         </div>
     );
 }
