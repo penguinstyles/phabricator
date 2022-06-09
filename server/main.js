@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { commentsdb } from "../imports/api/comments";
 import { ticketsdb } from "../imports/api/tickets";
 
 Meteor.startup(() => {

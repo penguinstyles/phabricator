@@ -1,5 +1,5 @@
 import React from "react";
-import { ticketsdb } from "../../api/tickets";
+import {ticketsdb} from "../../api/tickets";
 
 export const NewTicketForm = () => {
     const [title, setTitle] = React.useState("");
@@ -67,7 +67,7 @@ export const NewTicketForm = () => {
                 <input
                     type="text"
                     id="author"
-                        value={author}
+                    value={author}
                     placeholder={"corey"}
                     onChange={(e) => setAuthor(e.target.value)}
                 />

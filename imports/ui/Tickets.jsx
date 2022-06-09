@@ -1,8 +1,8 @@
 import React from 'react';
 import {useTracker} from 'meteor/react-meteor-data';
 import {ticketsdb} from '../api/tickets';
-import {NewTicketForm} from "./forms/NewTicketForm";
 import {CloseTicketButton} from "./forms/CloseTicketButton";
+import {NewTicketForm} from "./forms/NewTicketForm";
 import {RenameTicketButton} from "./forms/RenameTicketButton";
 
 export const Tickets = () => {
