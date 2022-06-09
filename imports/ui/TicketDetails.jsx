@@ -19,6 +19,7 @@ export const TicketDetails = (params, queryParams) => {
 
     return(
         <div>
+            <a href={"/"}>Back</a>
             <h2>Ticket details</h2>
             <ul>{thisTicket.map(
                 ticket => <li key={ticket._id}>
