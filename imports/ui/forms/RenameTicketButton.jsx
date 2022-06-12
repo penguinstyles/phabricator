@@ -1,10 +1,13 @@
 import React from "react";
 import { ticketsdb } from "../../api/tickets";
+import {commentsdb} from "../../api/comments";
 
 export const RenameTicketButton = (props) => {
     const RenameTicket = () => {
         let confirmation = confirm("Are you sure you want to rename this ticket?" + props.ticket_id);
+        let currentTitle = props.ticket_title;
         let newTitle = prompt("What would you like to rename this ticket to?");
+        let user = prompt("What is your name?");
 
         if(confirmation && newTitle) {
             ticketsdb.update({ _id: props.ticket_id },
@@ -13,6 +16,13 @@ export const RenameTicketButton = (props) => {
                         title: newTitle
                     }
                 });
+
+            commentsdb.insert({
+                author: "[Phabricator]",
+                comment: user + " has renamed this ticket from " + currentTitle + " to " + newTitle,
+                parent_ticket: props.ticket_id,
+                timestamp: new Date()
+            });
         }
     }
 

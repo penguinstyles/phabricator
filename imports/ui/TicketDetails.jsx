@@ -25,7 +25,7 @@ export const TicketDetails = (params, queryParams) => {
                 ticket => <li key={ticket._id}>
                     <a href={"/ticket/" + ticket._id}>{ticket.title}</a>
                     <CloseTicketButton ticket_id={ticket._id} />
-                    <RenameTicketButton ticket_id={ticket._id} />
+                    <RenameTicketButton ticket_id={ticket._id} ticket_title={ticket.title} />
                     <ul>
                         <li>Description: {ticket.description}</li>
                         <li>Author: {ticket.author}</li>
