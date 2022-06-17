@@ -27,11 +27,13 @@ export const NewTicketCommentForm = (ticket) => {
                 type="text"
                 id="comment"
                 placeholder={"Leave a comment.."}
+                className={""}
                 onChange={(e) => setComment(e.target.value)}
             />
             <button type="button" onClick={SubmitComment}>
                 Submit comment
             </button>
+
         </form>
     );
 }

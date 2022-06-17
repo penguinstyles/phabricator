@@ -2,54 +2,112 @@ import React from 'react';
 import {commentsdb} from "../api/comments";
 import {ticketsdb} from "../api/tickets";
 import {useTracker} from "meteor/react-meteor-data";
+import {Badge} from "./components/Badge";
 import {CloseTicketButton} from "./forms/CloseTicketButton";
-import {RenameTicketButton} from "./forms/RenameTicketButton";
+import {GlobalNavigation} from "./components/GlobalNavigation";
 import {NewTicketCommentForm} from "./forms/NewTicketCommentForm";
+import {RenameTicketButton} from "./forms/RenameTicketButton";
+import {ReopenTicketButton} from "./forms/ReopenTicketButton";
 
 export const TicketDetails = (params, queryParams) => {
 
     let _id = params.params._id;
-    const thisTicket = useTracker(() => {
-        return ticketsdb.find({_id: _id}).fetch();
-    });
 
     const childComments = useTracker(() => {
         return commentsdb.find({parent_ticket: _id}).fetch();
     });
 
+    const alltickets = useTracker(() => {
+        return ticketsdb.find({}).fetch();
+    });
+
+    const thisTicket = useTracker(() => {
+        return ticketsdb.find({_id: _id}).fetch();
+    });
+
     return(
-        <div>
-            <a href={"/"}>Back</a>
-            <h2>Ticket details</h2>
-            <ul>{thisTicket.map(
-                ticket => <li key={ticket._id}>
-                    <a href={"/ticket/" + ticket._id}>{ticket.title}</a>
-                    <CloseTicketButton ticket_id={ticket._id} />
-                    <RenameTicketButton ticket_id={ticket._id} ticket_title={ticket.title} />
-                    <ul>
-                        <li>Description: {ticket.description}</li>
-                        <li>Author: {ticket.author}</li>
-                        <li>Assigned to: {ticket.assigned_to}</li>
-                        <li>Status: {ticket.status === "open" ? "Open" : "Closed"}</li>
-                        <li>Priority: {ticket.priority.toUpperCase()}</li>
-                        {ticket.status === "open" ? "" : <ul>
-                            <li>Closed by: {ticket.status.closed_by}</li>
-                            <li>Closure message: {ticket.status.closure_message}</li>
-                        </ul>}
-                    </ul>
-                </li>
-            )}</ul>
-
-            <h3>Comments</h3>
-            <ul>{childComments.map(
-                child =>
-                    <span key={child._id}>
-                        <li>() <b>{child.author}</b>: {child.comment}</li>
-                    </span>
-            )}</ul>
-
-            <h3>Submit a new comment</h3>
-            {thisTicket[0].status === "open" ? <NewTicketCommentForm id={_id}/> : "This ticket has been closed and may not be commented on."}
+        <div className={"h-screen flex overflow-x-hidden overflow-y-hidden"}>
+            <GlobalNavigation/>
+            <div className={"block"}>
+                <div style={{height:'64px', lineHeight:'64px', marginLeft: '68px'}} className={"border-b"}>
+                    <div className={"px-2"}>
+                        <span>Search bar and misc nav stuff will go here</span>
+                    </div>
+                </div>
+                <div style={{height:'calc(100% - 64px)', marginLeft: '68px'}} className={"flex"}>
+                    <div className={"border-r overflow-y-auto w-1/4"}>
+                        <ul className={""}>
+                            {alltickets.map(ticket =>
+                                <a href={"/ticket/" + ticket._id}>
+                                    <li className={"border-b p-4 hover:bg-gray-100"}>
+                                        <div className={"flex"}>
+                                            <span className={"font-semibold text-sm w-3/4"}>{ticket.title}</span>
+                                            <span className={"w-1/4"}>Timestamp</span>
+                                        </div>
+                                        <span className={""}>{ticket.description}</span>
+                                    </li>
+                                </a>
+                            )}
+                        </ul>
+                    </div>
+                    <div className={"overflow-y-auto w-3/4"}>
+                        {thisTicket.map(ticket =>
+                            <div key={ticket._id} className={"h-screen"}>
+                                <div style={{lineHeight:'64px'}} className={"border-b flex h-24 p-4"}>
+                                    <div className={"font-semibold truncate w-3/12"}>{ticket.title}</div>
+                                    <div className={"flex justify-center px-2 space-x-2"}>
+                                        {ticket.status === "open" ? <CloseTicketButton /> : <ReopenTicketButton />} <RenameTicketButton />
+                                    </div>
+                                </div>
+                                <div className={"flex p-4 space-x-4"}>
+                                    <div className={"w-2/3"}>
+                                        <span className={"font-semibold text-lg"}>{ticket.title}</span>
+                                        <div className={"border mt-4 rounded"}>
+                                            <div className={"bg-gray-100 p-2"}>
+                                                Description
+                                            </div>
+                                            <div className={"p-2"}>
+                                                {ticket.description}
+                                            </div>
+                                        </div>
+                                        <hr className={"border-b my-6"} />
+                                        <div className={"font-semibold mt-4 text-lg"}>Comments</div>
+                                        {childComments.map(comment =>
+                                            <div key={comment._id}>
+                                                <div className={"border mt-4 rounded"}>
+                                                    <div className={"bg-gray-100 flex p-2"}>
+                                                        <div className={"w-3/4"}>
+                                                            {comment.author}
+                                                        </div>
+                                                        <div className={"text-gray-600"}>
+                                                            timestamp
+                                                        </div>
+                                                    </div>
+                                                    <div className={"p-2"}>
+                                                        {comment.comment}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                        <hr className={"border-b my-6"} />
+                                        <div className={"font-semibold mt-4 text-lg"}>Submit a new comment</div>
+                                        <div>
+                                            {ticket.status === 'open' ? <NewTicketCommentForm id={ticket._id} /> : "This ticket has been closed and may not be commented on."}
+                                        </div>
+                                    </div>
+                                    <div className={"w-1/3"}>
+                                        <ol className={"border rounded"}>
+                                            <li className={"border-b p-4"}>Author: {ticket.author}</li>
+                                            <li className={"border-b p-4"}>Priority: {ticket.priority}</li>
+                                            <li className={"border-b p-4"}>Tags: <Badge text={"asdf"} color={"blue"}/> <Badge text={"asdf"} color={"blue"}/> <Badge text={"asdf"} color={"blue"}/> <Badge text={"asdf"} color={"blue"}/></li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
